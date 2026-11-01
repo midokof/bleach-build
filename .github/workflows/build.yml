@@ -22,6 +22,7 @@ jobs:
             -framework Foundation \
             -framework UIKit \
             -framework QuartzCore \
+            -framework CoreGraphics \
             -o Bleach.dylib \
             Bleach.m
           file Bleach.dylib
