@@ -13,9 +13,11 @@ jobs:
         run: |
           set -e
           xcode-select -p
+          SDK=$(xcrun --sdk iphoneos --show-sdk-path)
           clang -shared \
             -arch arm64 \
             -target arm64-apple-ios14.0 \
+            -isysroot "$SDK" \
             -fobjc-arc \
             -framework Foundation \
             -framework UIKit \
