@@ -12,19 +12,11 @@ jobs:
       - name: Build dylib
         run: |
           set -e
-          xcode-select -p
           SDK=$(xcrun --sdk iphoneos --show-sdk-path)
-          clang -shared \
-            -arch arm64 \
-            -target arm64-apple-ios14.0 \
-            -isysroot "$SDK" \
-            -fobjc-arc \
-            -framework Foundation \
-            -framework UIKit \
-            -framework QuartzCore \
-            -framework CoreGraphics \
-            -o Bleach.dylib \
-            Bleach.m
+          COMMON="-target arm64-apple-ios14.0 -isysroot $SDK -fobjc-arc -framework Foundation -framework UIKit -framework QuartzCore -framework CoreGraphics"
+          clang -shared -arch arm64 $COMMON -o Bleach_arm64.dylib Bleach.m
+          clang -shared -arch arm64e $COMMON -target arm64e-apple-ios14.0 -o Bleach_arm64e.dylib Bleach.m
+          lipo -create Bleach_arm64.dylib Bleach_arm64e.dylib -output Bleach.dylib
           file Bleach.dylib
           ls -la Bleach.dylib
       - name: Upload artifact
