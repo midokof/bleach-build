@@ -1,0 +1,31 @@
+name: Build Bleach.dylib
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build dylib
+        run: |
+          set -e
+          xcode-select -p
+          clang -shared \
+            -arch arm64 \
+            -target arm64-apple-ios14.0 \
+            -fobjc-arc \
+            -framework Foundation \
+            -framework UIKit \
+            -framework QuartzCore \
+            -o Bleach.dylib \
+            Bleach.m
+          file Bleach.dylib
+          ls -la Bleach.dylib
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Bleach.dylib
+          path: Bleach.dylib
